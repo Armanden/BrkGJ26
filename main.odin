@@ -63,7 +63,11 @@ npc :: struct {
 
 dialouge :: struct {
 	state: i8,
+	drawing: bool,
+	lines: [MAX_DIALOUGE]cstring,
 }
+
+MAX_DIALOUGE :: 7
 
 
 
@@ -127,11 +131,16 @@ DrawNPC :: proc(x,y: i32, texture: rl.Texture2D, hitbox: rl.Rectangle ){
 	rl.DrawTexture(texture, x,y, rl.WHITE)
 }
 
-DrawDialouge :: proc(text: npc.dialouge.state, drawing: bool){
-	if drawing {
-		rl.DrawText(text,10,660, 20, rl.WHITE)
+DrawDialouge :: proc(d: ^dialouge){
+	if d.drawing {
+		index := int(d.state - 1)
+		if index >= 0 && index < MAX_DIALOUGE {
+			rl.DrawText(d.lines[index], 10, 660, 20, rl.WHITE)
+		}
 	}
 }
+
+
 
 
 // main ------------------------------------------------------------------------------------------------
@@ -193,6 +202,16 @@ main :: proc () {
 	bob.x = 400
 	bob.y = 400
 	bob.dialouge.state = 1
+	bob.dialouge.drawing = false
+	bob.dialouge.lines = {
+		"Line 1: Some dialouge...",
+		"Line 2: Other dialouge",
+		"Line 3",
+		"Line 4",
+		"Line 5",
+		"Line 6",
+		"Line 7",
+	}
 	bob.hitbox = {f32(bob.x) +14.2, f32(bob.y) +12.4 , 3.2, 11}
 	bob.texture = rl.LoadTexture("assets/bob.png")
 
@@ -263,17 +282,18 @@ main :: proc () {
 		}
 
 		if rl.CheckCollisionRecs(p.hitbox, bob.hitbox){
-			if rl.IsKeyPressed(.E){
-				if bob.state == 1 {
-					rl.DrawText("Some dialouge, ahsuhatnehtnehaothutneaohuhaoetnuhsoahtueoshtuhoeastnuhoetnshuoseah",10, 660, 20, rl.WHITE)
-						if rl.IsKeyPressed(.ENTER){
-							bob.state = 2
-						}
+			if rl.IsKeyPressed(.E) {
+				bob.dialouge.drawing = true
+			}
+		} else {
+			bob.dialouge.drawing = false
+		}
 
-				}
-				if bob.state == 2 {
-					rl.DrawText("Other dialouge", 10, 660, 20, rl.WHITE)
-				}
+		if bob.dialouge.drawing && rl.IsKeyPressed(.ENTER){
+			bob.dialouge.state += 1
+			if bob.dialouge.state > MAX_DIALOUGE {
+				bob.dialouge.state = 1
+				bob.dialouge.drawing = false
 			}
 		}
 
@@ -321,8 +341,10 @@ main :: proc () {
 		//NPCs
 		DrawNPC(bob.x,bob.y, bob.texture, bob.hitbox)
 
-		//Dialouges
-		DrawDialouge()
+		//dialouges
+		DrawDialouge(&bob.dialouge)
+
+		//always draw
 
 
 		//bars
