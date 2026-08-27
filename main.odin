@@ -3,12 +3,13 @@
 // [x] interaction mechanic
 // [x] flashlight and battery mechanic
 // [x] player health and poisoning
+// [x] NPCs
 // [] speech bubbles
 // [] tracker of talking --> after you talk to someone, their speech bubble changes
 // [x] Bars and textures
 // [x] add collectable batteries
 // [] decorations
-// [] walls
+// [x] walls
 //
 // Bug:
 // [x] if the player eats the cake and spams the E key it doesnt stop the interaction from stopping till the player stops colliding
@@ -55,9 +56,13 @@ npc :: struct {
 	x: i32,
 	y: i32,
 	texture: rl.Texture2D,
-	state: i8,
+	dialouge: dialouge,
 	hitbox: rl.Rectangle,
 
+}
+
+dialouge :: struct {
+	state: i8,
 }
 
 
@@ -87,10 +92,10 @@ DrawBattery :: proc(battery: i16, texture1: rl.Texture2D, texture2: rl.Texture2D
 	if battery > 60 && battery < 80{
 		rl.DrawTextureEx(texture4,rl.Vector2{0,0},0,3,rl.WHITE)
 	}
-	if battery > 40 && battery < 60{
+	if battery >= 40 && battery < 60{
 		rl.DrawTextureEx(texture3,rl.Vector2{0,0},0,3,rl.WHITE)
 	}
-	if battery > 20 && battery < 40{
+	if battery >= 20 && battery < 40{
 		rl.DrawTextureEx(texture2,rl.Vector2{0,0},0,3,rl.WHITE)
 	}
 	if battery >= 0 && battery < 20{
@@ -115,6 +120,17 @@ DrawFood :: proc(x,y : i32, texture: rl.Texture2D, status: bool, hitbox: rl.Rect
 		rl.DrawTexture(texture, x,y, rl.WHITE)
 	}
 
+}
+
+DrawNPC :: proc(x,y: i32, texture: rl.Texture2D, hitbox: rl.Rectangle ){
+	rl.DrawRectangleRec(hitbox, rl.BLACK)
+	rl.DrawTexture(texture, x,y, rl.WHITE)
+}
+
+DrawDialouge :: proc(text: npc.dialouge.state, drawing: bool){
+	if drawing {
+		rl.DrawText(text,10,660, 20, rl.WHITE)
+	}
 }
 
 
@@ -161,7 +177,7 @@ main :: proc () {
 	poisonous_cake.picked_up = false
 	poisonous_cake.poisonous = true
 	poisonous_cake.texture = rl.LoadTexture("assets/cakepoisonous.png")
-	poisonous_cake.hitbox = {f32(poisonous_cake.x) + 12, f32(poisonous_cake.y) + 11 , 3,4}
+	poisonous_cake.hitbox = {f32(poisonous_cake.x) + 12, f32(poisonous_cake.y) + 11 , 4,4}
 
 	normal_cake: food
 	normal_cake.x = 600
@@ -169,7 +185,17 @@ main :: proc () {
 	normal_cake.picked_up = false
 	normal_cake.poisonous = false
 	normal_cake.texture = rl.LoadTexture("assets/cakenormal.png")
-	normal_cake.hitbox = {f32(normal_cake.x)+12, f32(normal_cake.y)+11, 3,4}
+	normal_cake.hitbox = {f32(normal_cake.x)+12, f32(normal_cake.y)+11, 4,4}
+
+	//npcs
+
+	bob: npc
+	bob.x = 400
+	bob.y = 400
+	bob.dialouge.state = 1
+	bob.hitbox = {f32(bob.x) +14.2, f32(bob.y) +12.4 , 3.2, 11}
+	bob.texture = rl.LoadTexture("assets/bob.png")
+
 
 
 	defer rl.UnloadTexture(p.texture)
@@ -185,14 +211,17 @@ main :: proc () {
 	defer rl.UnloadTexture(poisonous_cake.texture)
 	defer rl.UnloadTexture(normal_cake.texture)
 
+	defer rl.UnloadTexture(bob.texture)
+
 
 	for !rl.WindowShouldClose() {
 		p.hitbox = {f32(p.x) - 1, f32(p.y) - 3, 3.2, 11,} // have to put it in the game loop so it updates with the playr position
 
-		if rl.CheckCollisionRecs(bc.hitbox, p.hitbox){
-			bc.picked_up = true
-			battery += 20
-
+		if !bc.picked_up {
+			if rl.CheckCollisionRecs(bc.hitbox, p.hitbox){
+				bc.picked_up = true
+				battery = battery + 20
+			}
 		}
 
 		if p.alive {
@@ -230,6 +259,21 @@ main :: proc () {
 						p.health = p.health + 20
 						normal_cake.picked_up = true
 					}
+			}
+		}
+
+		if rl.CheckCollisionRecs(p.hitbox, bob.hitbox){
+			if rl.IsKeyPressed(.E){
+				if bob.state == 1 {
+					rl.DrawText("Some dialouge, ahsuhatnehtnehaothutneaohuhaoetnuhsoahtueoshtuhoeastnuhoetnshuoseah",10, 660, 20, rl.WHITE)
+						if rl.IsKeyPressed(.ENTER){
+							bob.state = 2
+						}
+
+				}
+				if bob.state == 2 {
+					rl.DrawText("Other dialouge", 10, 660, 20, rl.WHITE)
+				}
 			}
 		}
 
@@ -273,6 +317,12 @@ main :: proc () {
 		DrawBatteryCollectable(bc.x, bc.y, bc.texture, bc.picked_up, bc.hitbox)
 		DrawFood(poisonous_cake.x, poisonous_cake.y, poisonous_cake.texture,poisonous_cake.picked_up, poisonous_cake.hitbox)
 		DrawFood(normal_cake.x, normal_cake.y, normal_cake.texture,normal_cake.picked_up, normal_cake.hitbox)
+
+		//NPCs
+		DrawNPC(bob.x,bob.y, bob.texture, bob.hitbox)
+
+		//Dialouges
+		DrawDialouge()
 
 
 		//bars
