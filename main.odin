@@ -271,7 +271,7 @@ main :: proc () {
 		"Line 6",
 		"Line 7",
 	}
-	idiotsam.hitbox = {f32(idiotsam.x) +14.2, f32(idiotsam.y) +12.4 , 3.2, 4}
+	//idiotsam.hitbox = {f32(idiotsam.x) +14.2, f32(idiotsam.y) +12.4 , 3.2, 4}
 	idiotsam.texture = rl.LoadTexture("assets/idiotsam.png")
 // will have extra mechanics
 
@@ -346,6 +346,8 @@ main :: proc () {
 
 
 	IsSamAngry:bool= false
+	sam_direction: f32 = 1.0
+	sam_speed: f32 = 10.0
 
 	//map
 	game_map: rl.Texture2D = rl.LoadTexture("assets/map.png")
@@ -378,6 +380,7 @@ main :: proc () {
 
 	for !rl.WindowShouldClose() {
 		p.hitbox = {f32(p.x) - 1, f32(p.y) - 3, 3.2, 11,} // have to put it in the game loop so it updates with the playr position
+		idiotsam.hitbox = {f32(idiotsam.x) +14.2, f32(idiotsam.y) +12.4 , 3.2, 4}
 
 		if !bc.picked_up {
 			if rl.CheckCollisionRecs(bc.hitbox, p.hitbox){
@@ -557,21 +560,18 @@ main :: proc () {
 			IsSamAngry = true
 		}
 
-		sam_direction: f32 = 1.0
-		sam_speed: f32 = 10.0
-
 		if IsSamAngry {
-			idiotsam.x += i32(sam_direction * sam_speed )
+			idiotsam.x += i32(sam_direction * sam_speed)
 
-      		if idiotsam.x > 690 {
-        		idiotsam.x = 690
-          		sam_direction = -1.0
-        	}
+			if idiotsam.x > 690 {
+				idiotsam.x = 690
+				sam_direction = -1.0
+			}
 
          	if idiotsam.x <= 0 {
-          		idiotsam.x = 0
-           		sam_direction = 1.0
-          	}
+				idiotsam.x = 0
+				sam_direction = 1.0
+			}
 		}
 
 
