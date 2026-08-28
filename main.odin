@@ -16,7 +16,7 @@
 // [x] lighting
 // [x] police donut mechanic, where he gives you batteries
 // [] map walls
-// [] add a few baloons
+// [x] add a few baloons
 //
 // Bug:
 // [x] if the player eats the cake and spams the E key it doesnt stop the interaction from stopping till the player stops colliding
@@ -142,7 +142,7 @@ DrawDialouge :: proc(d: ^dialouge){
 	if d.drawing {
 		index := int(d.state - 1)
 		if index >= 0 && index < MAX_DIALOUGE {
-			rl.DrawText(d.lines[index], 10, 660, 20, rl.WHITE)
+			rl.DrawText(d.lines[index], 10, 800, 20, rl.WHITE)
 		}
 	}
 }
@@ -384,6 +384,8 @@ main :: proc () {
 	donut_mission_complete :bool=false
 
 	baloon: rl.Texture2D = rl.LoadTexture("assets/baloon.png")
+
+	show_eaten_text: f32
 
 	defer rl.UnloadTexture(p.texture)
 
@@ -710,6 +712,12 @@ main :: proc () {
 			if donut.picked_up && police.dialouge.state < 6 {
 				rl.DrawRectangleRec(donut.hitbox, rl.BLACK)
 				rl.DrawTextureEx(donut.texture,rl.Vector2{680, 800}, 0, 2, rl.WHITE)
+			}
+
+			show_eaten_text += rl.GetFrameTime()
+			if normal_cake.picked_up && show_eaten_text > 2 {
+				rl.DrawText("You ate the CAKE",10, 800, 20, rl.WHITE)
+				//show_eaten_text = 0
 			}
 
 
