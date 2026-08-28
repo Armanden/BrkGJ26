@@ -1,15 +1,18 @@
 //List
-// [] Assets and map
+// [x] Assets and map
 // [x] interaction mechanic
 // [x] flashlight and battery mechanic
 // [x] player health and poisoning
 // [x] NPCs
-// [] speech bubbles
-// [] tracker of talking --> after you talk to someone, their speech bubble changes
+// [x] speech bubbles
+// [x] tracker of talking --> after you talk to someone, their speech bubble changes
 // [x] Bars and textures
 // [x] add collectable batteries
-// [] decorations
+// [] decorations, include a locker wher the playr can hide
 // [x] walls
+// [] angry man mechanic
+// [] map movement mechanic, along with moving the npcs
+// [] dialouge and lore whateever
 //
 // Bug:
 // [x] if the player eats the cake and spams the E key it doesnt stop the interaction from stopping till the player stops colliding
@@ -146,7 +149,7 @@ DrawDialouge :: proc(d: ^dialouge){
 // main ------------------------------------------------------------------------------------------------
 
 main :: proc () {
-	rl.InitWindow(700, 800, "Late to the PARTY")
+	rl.InitWindow(700, 900, "Late to the PARTY")
 	rl.SetTargetFPS(60)
 
 	p: Player
@@ -215,6 +218,136 @@ main :: proc () {
 	bob.hitbox = {f32(bob.x) +14.2, f32(bob.y) +12.4 , 3.2, 11}
 	bob.texture = rl.LoadTexture("assets/bob.png")
 
+	cat: npc
+	cat.x = 600
+	cat.y = 500
+	cat.dialouge.state = 1
+	cat.dialouge.drawing = false
+	cat.dialouge.lines = {
+		"Line 1: I is Cat",
+		"Line 2: I can has cheesburger",
+		"Line 3",
+		"Line 4",
+		"Line 5",
+		"Line 6",
+		"Line 7",
+	}
+	cat.hitbox = {f32(cat.x) +14.2, f32(cat.y) +12.4 , 3.2, 4}
+	cat.texture = rl.LoadTexture("assets/cat.png")
+
+	hungry: npc
+	hungry.x = 200
+	hungry.y = 500
+	hungry.dialouge.state = 1
+	hungry.dialouge.drawing = false
+	hungry.dialouge.lines = {
+		"Line 1: I is Cat",
+		"Line 2: I can has cheesburger",
+		"Line 3",
+		"Line 4",
+		"Line 5",
+		"Line 6",
+		"Line 7",
+	}
+	hungry.hitbox = {f32(hungry.x) +14.2, f32(hungry.y) +12.4 , 3.2, 4}
+	hungry.texture = rl.LoadTexture("assets/hungry.png")
+
+	// idiotsam will have a different mechanic, one of attack
+	//and i dont know why i didnt just make a universal function but o'well
+
+	idiotsam: npc
+	idiotsam.x = 300
+	idiotsam.y = 500
+	idiotsam.dialouge.state = 1
+	idiotsam.dialouge.drawing = false
+	idiotsam.dialouge.lines = {
+		"Line 1: I is Cat",
+		"Line 2: I can has cheesburger",
+		"Line 3",
+		"Line 4",
+		"Line 5",
+		"Line 6",
+		"Line 7",
+	}
+	idiotsam.hitbox = {f32(idiotsam.x) +14.2, f32(idiotsam.y) +12.4 , 3.2, 4}
+	idiotsam.texture = rl.LoadTexture("assets/idiotsam.png")
+// will have extra mechanics
+
+
+	jake: npc
+	jake.x = 200
+	jake.y = 400
+	jake.dialouge.state = 1
+	jake.dialouge.drawing = false
+	jake.dialouge.lines = {
+		"Line 1: I is Cat",
+		"Line 2: I can has cheesburger",
+		"Line 3",
+		"Line 4",
+		"Line 5",
+		"Line 6",
+		"Line 7",
+	}
+	jake.hitbox = {f32(jake.x) +14.2, f32(jake.y) +12.4 , 3.2, 4}
+	jake.texture = rl.LoadTexture("assets/jake.png")
+
+	meg: npc
+	meg.x = 400
+	meg.y = 200
+	meg.dialouge.state = 1
+	meg.dialouge.drawing = false
+	meg.dialouge.lines = {
+		"Line 1: I is Cat",
+		"Line 2: I can has cheesburger",
+		"Line 3",
+		"Line 4",
+		"Line 5",
+		"Line 6",
+		"Line 7",
+	}
+	meg.hitbox = {f32(meg.x) +14.2, f32(meg.y) +12.4 , 3.2, 4}
+	meg.texture = rl.LoadTexture("assets/meg.png")
+
+	police: npc
+	police.x = 200
+	police.y = 600
+	police.dialouge.state = 1
+	police.dialouge.drawing = false
+	police.dialouge.lines = {
+		"Line 1: I is Cat",
+		"Line 2: I can has cheesburger",
+		"Line 3",
+		"Line 4",
+		"Line 5",
+		"Line 6",
+		"Line 7",
+	}
+	police.hitbox = {f32(police.x) +14.2, f32(police.y) +12.4 , 3.2, 4}
+	police.texture = rl.LoadTexture("assets/police.png")
+
+	stan: npc
+	stan.x = 500
+	stan.y = 500
+	stan.dialouge.state = 1
+	stan.dialouge.drawing = false
+	stan.dialouge.lines = {
+		"Line 1: I is Cat",
+		"Line 2: I can has cheesburger",
+		"Line 3",
+		"Line 4",
+		"Line 5",
+		"Line 6",
+		"Line 7",
+	}
+	stan.hitbox = {f32(stan.x) +14.2, f32(stan.y) +12.4 , 3.2, 4}
+	stan.texture = rl.LoadTexture("assets/stan.png")
+
+
+	IsSamAngry:bool= false
+
+	//map
+	game_map: rl.Texture2D = rl.LoadTexture("assets/map.png")
+
 
 
 	defer rl.UnloadTexture(p.texture)
@@ -231,7 +364,15 @@ main :: proc () {
 	defer rl.UnloadTexture(normal_cake.texture)
 
 	defer rl.UnloadTexture(bob.texture)
+	defer rl.UnloadTexture(cat.texture)
+	defer rl.UnloadTexture(hungry.texture)
+	defer rl.UnloadTexture(idiotsam.texture)
+	defer rl.UnloadTexture(jake.texture)
+	defer rl.UnloadTexture(meg.texture)
+	defer rl.UnloadTexture(police.texture)
+	defer rl.UnloadTexture(stan.texture)
 
+	defer rl.UnloadTexture(game_map)
 
 	for !rl.WindowShouldClose() {
 		p.hitbox = {f32(p.x) - 1, f32(p.y) - 3, 3.2, 11,} // have to put it in the game loop so it updates with the playr position
@@ -297,6 +438,122 @@ main :: proc () {
 			}
 		}
 
+		if rl.CheckCollisionRecs(p.hitbox, cat.hitbox){
+			if rl.IsKeyPressed(.E) {
+				cat.dialouge.drawing = true
+			}
+		} else {
+			cat.dialouge.drawing = false
+		}
+
+		if cat.dialouge.drawing && rl.IsKeyPressed(.ENTER){
+			cat.dialouge.state += 1
+			if cat.dialouge.state > MAX_DIALOUGE {
+				cat.dialouge.state = 1
+				cat.dialouge.drawing = false
+			}
+		}
+
+		if rl.CheckCollisionRecs(p.hitbox, hungry.hitbox){
+			if rl.IsKeyPressed(.E) {
+				hungry.dialouge.drawing = true
+			}
+		} else {
+			hungry.dialouge.drawing = false
+		}
+
+		if hungry.dialouge.drawing && rl.IsKeyPressed(.ENTER){
+			hungry.dialouge.state += 1
+			if hungry.dialouge.state > MAX_DIALOUGE {
+				hungry.dialouge.state = 1
+				hungry.dialouge.drawing = false
+			}
+		}
+
+		if rl.CheckCollisionRecs(p.hitbox, idiotsam.hitbox){
+			if rl.IsKeyPressed(.E) {
+				idiotsam.dialouge.drawing = true
+			}
+		} else {
+			idiotsam.dialouge.drawing = false
+		}
+
+		if idiotsam.dialouge.drawing && rl.IsKeyPressed(.ENTER){
+			idiotsam.dialouge.state += 1
+			if idiotsam.dialouge.state > MAX_DIALOUGE {
+				idiotsam.dialouge.state = 1
+				idiotsam.dialouge.drawing = false
+			}
+		}
+
+		if rl.CheckCollisionRecs(p.hitbox, jake.hitbox){
+			if rl.IsKeyPressed(.E) {
+				jake.dialouge.drawing = true
+			}
+		} else {
+			jake.dialouge.drawing = false
+		}
+
+		if jake.dialouge.drawing && rl.IsKeyPressed(.ENTER){
+			jake.dialouge.state += 1
+			if jake.dialouge.state > MAX_DIALOUGE {
+				jake.dialouge.state = 1
+				jake.dialouge.drawing = false
+			}
+		}
+
+		if rl.CheckCollisionRecs(p.hitbox, hungry.hitbox){
+			if rl.IsKeyPressed(.E) {
+				meg.dialouge.drawing = true
+			}
+		} else {
+			meg.dialouge.drawing = false
+		}
+
+		if meg.dialouge.drawing && rl.IsKeyPressed(.ENTER){
+			meg.dialouge.state += 1
+			if meg.dialouge.state > MAX_DIALOUGE {
+				meg.dialouge.state = 1
+				meg.dialouge.drawing = false
+			}
+		}
+
+		if rl.CheckCollisionRecs(p.hitbox, police.hitbox){
+			if rl.IsKeyPressed(.E) {
+				police.dialouge.drawing = true
+			}
+		} else {
+			police.dialouge.drawing = false
+		}
+
+		if police.dialouge.drawing && rl.IsKeyPressed(.ENTER){
+			police.dialouge.state += 1
+			if police.dialouge.state > MAX_DIALOUGE {
+				police.dialouge.state = 1
+				police.dialouge.drawing = false
+			}
+		}
+
+		if rl.CheckCollisionRecs(p.hitbox, stan.hitbox){
+			if rl.IsKeyPressed(.E) {
+				stan.dialouge.drawing = true
+			}
+		} else {
+			stan.dialouge.drawing = false
+		}
+
+		if stan.dialouge.drawing && rl.IsKeyPressed(.ENTER){
+			stan.dialouge.state += 1
+			if stan.dialouge.state > MAX_DIALOUGE {
+				stan.dialouge.state = 1
+				stan.dialouge.drawing = false
+			}
+		}
+
+		//angry idiot sam mechanic
+		if normal_cake.picked_up && idiotsam.dialouge.state >=6 {
+
+		}
 
 
 
@@ -310,8 +567,8 @@ main :: proc () {
 		if p.x <=0{
 			p.x = 0
 		}
-		if p.y >= 650 {
-			p.y = 650
+		if p.y >= 750 {
+			p.y = 750
 		}
 
 
@@ -331,6 +588,9 @@ main :: proc () {
 		//rl.DrawRectangleRec(bc.hitbox, rl.GREEN)
 
 		//main
+
+		rl.DrawTextureEx(game_map, rl.Vector2{0,90}, 0, 22, rl.WHITE)
+
 		DrawFlashlight(battery,p.x,p.y)
 		DrawPlayer(p.x - 16, p.y - 16, p.texture, p.hitbox)
 		DrawBattery(battery, texture1,texture2,texture3,texture4,texture5)
@@ -340,9 +600,25 @@ main :: proc () {
 
 		//NPCs
 		DrawNPC(bob.x,bob.y, bob.texture, bob.hitbox)
+		DrawNPC(cat.x,cat.y,cat.texture,cat.hitbox)
+		DrawNPC(hungry.x,hungry.y,hungry.texture,hungry.hitbox)
+		DrawNPC(idiotsam.x,idiotsam.y,idiotsam.texture,idiotsam.hitbox)
+		DrawNPC(jake.x,jake.y,jake.texture,jake.hitbox)
+		DrawNPC(meg.x,meg.y,meg.texture,meg.hitbox)
+		DrawNPC(police.x,police.y,police.texture,police.hitbox)
+		DrawNPC(stan.x,stan.y,stan.texture,stan.hitbox)
+
 
 		//dialouges
 		DrawDialouge(&bob.dialouge)
+		DrawDialouge(&cat.dialouge)
+		DrawDialouge(&hungry.dialouge)
+		DrawDialouge(&idiotsam.dialouge)
+		DrawDialouge(&jake.dialouge)
+		DrawDialouge(&meg.dialouge)
+		DrawDialouge(&police.dialouge)
+		DrawDialouge(&stan.dialouge)
+
 
 		//always draw
 
