@@ -12,7 +12,7 @@
 // [x] walls
 // [x] angry man mechanic
 // [not needed] map movement mechanic, along with moving the npcs
-// [] dialouge and lore whateever
+// [x] dialouge and lore whateever
 // [x] lighting
 // [x] police donut mechanic, where he gives you batteries
 // [] map walls
@@ -699,6 +699,11 @@ main :: proc () {
 		DrawPlayer(p.x - 16, p.y - 16, p.texture, p.hitbox)
 		DrawBattery(battery, texture1,texture2,texture3,texture4,texture5)
 		//DrawBatteryCollectable(bc.x, bc.y, bc.texture, bc.picked_up, bc.hitbox)
+
+		if donut_mission_complete && poisonous_cake.picked_up && battery != 0 && p.alive && p.x < 380 && p.x > 300 && p.y <= 105  {
+			rl.DrawText("YOU WIN", 250, 400, 50, rl.RED)
+		}
+
 
 		if battery > 0 {
 			DrawFood(poisonous_cake.x, poisonous_cake.y, poisonous_cake.texture,poisonous_cake.picked_up, poisonous_cake.hitbox)
