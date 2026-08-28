@@ -13,8 +13,9 @@
 // [x] angry man mechanic
 // [not needed] map movement mechanic, along with moving the npcs
 // [] dialouge and lore whateever
-// [] lighting
+// [x] lighting
 // [] police donut mechanic, where he gives you batteries
+// [] map walls
 //
 // Bug:
 // [x] if the player eats the cake and spams the E key it doesnt stop the interaction from stopping till the player stops colliding
@@ -613,38 +614,41 @@ main :: proc () {
 		//rl.DrawRectangleRec(bc.hitbox, rl.GREEN)
 
 		//main
+		if battery > 0 {
+			rl.DrawTextureEx(game_map, rl.Vector2{0,90}, 0, 22, rl.WHITE)
+		}
 
-		rl.DrawTextureEx(game_map, rl.Vector2{0,90}, 0, 22, rl.WHITE)
-
-		DrawFlashlight(battery,p.x,p.y)
+		//DrawFlashlight(battery,p.x,p.y)
 		DrawPlayer(p.x - 16, p.y - 16, p.texture, p.hitbox)
 		DrawBattery(battery, texture1,texture2,texture3,texture4,texture5)
 		DrawBatteryCollectable(bc.x, bc.y, bc.texture, bc.picked_up, bc.hitbox)
-		DrawFood(poisonous_cake.x, poisonous_cake.y, poisonous_cake.texture,poisonous_cake.picked_up, poisonous_cake.hitbox)
-		DrawFood(normal_cake.x, normal_cake.y, normal_cake.texture,normal_cake.picked_up, normal_cake.hitbox)
 
-		//NPCs
-		DrawNPC(bob.x,bob.y, bob.texture, bob.hitbox)
-		DrawNPC(cat.x,cat.y,cat.texture,cat.hitbox)
-		DrawNPC(hungry.x,hungry.y,hungry.texture,hungry.hitbox)
-		DrawNPC(idiotsam.x,idiotsam.y,idiotsam.texture,idiotsam.hitbox)
-		DrawNPC(jake.x,jake.y,jake.texture,jake.hitbox)
-		DrawNPC(meg.x,meg.y,meg.texture,meg.hitbox)
-		DrawNPC(police.x,police.y,police.texture,police.hitbox)
-		DrawNPC(stan.x,stan.y,stan.texture,stan.hitbox)
+		if battery > 0 {
+			DrawFood(poisonous_cake.x, poisonous_cake.y, poisonous_cake.texture,poisonous_cake.picked_up, poisonous_cake.hitbox)
+			DrawFood(normal_cake.x, normal_cake.y, normal_cake.texture,normal_cake.picked_up, normal_cake.hitbox)
 
-
-		//dialouges
-		DrawDialouge(&bob.dialouge)
-		DrawDialouge(&cat.dialouge)
-		DrawDialouge(&hungry.dialouge)
-		DrawDialouge(&idiotsam.dialouge)
-		DrawDialouge(&jake.dialouge)
-		DrawDialouge(&meg.dialouge)
-		DrawDialouge(&police.dialouge)
-		DrawDialouge(&stan.dialouge)
+			//NPCs
+			DrawNPC(bob.x,bob.y, bob.texture, bob.hitbox)
+			DrawNPC(cat.x,cat.y,cat.texture,cat.hitbox)
+			DrawNPC(hungry.x,hungry.y,hungry.texture,hungry.hitbox)
+			DrawNPC(idiotsam.x,idiotsam.y,idiotsam.texture,idiotsam.hitbox)
+			DrawNPC(jake.x,jake.y,jake.texture,jake.hitbox)
+			DrawNPC(meg.x,meg.y,meg.texture,meg.hitbox)
+			DrawNPC(police.x,police.y,police.texture,police.hitbox)
+			DrawNPC(stan.x,stan.y,stan.texture,stan.hitbox)
 
 
+			//dialouges
+			DrawDialouge(&bob.dialouge)
+			DrawDialouge(&cat.dialouge)
+			DrawDialouge(&hungry.dialouge)
+			DrawDialouge(&idiotsam.dialouge)
+			DrawDialouge(&jake.dialouge)
+			DrawDialouge(&meg.dialouge)
+			DrawDialouge(&police.dialouge)
+			DrawDialouge(&stan.dialouge)
+
+		}
 		//always draw
 
 
