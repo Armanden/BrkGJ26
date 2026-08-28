@@ -165,7 +165,7 @@ main :: proc () {
 
 	p: Player
 	p.x = 345
-	p.y = 390
+	p.y = 730
 	p.speed = 3
 
 	p.texture = rl.LoadTexture("assets/player.png")
@@ -700,7 +700,7 @@ main :: proc () {
 		DrawBattery(battery, texture1,texture2,texture3,texture4,texture5)
 		//DrawBatteryCollectable(bc.x, bc.y, bc.texture, bc.picked_up, bc.hitbox)
 
-		if donut_mission_complete && poisonous_cake.picked_up && battery != 0 && p.alive && p.x < 380 && p.x > 300 && p.y <= 105  {
+		if donut_mission_complete && poisonous_cake.picked_up && cat.dialouge.state == 7&& battery != 0 && p.alive && p.x < 380 && p.x > 300 && p.y <= 105  {
 			rl.DrawText("YOU WIN", 250, 400, 50, rl.RED)
 		}
 
