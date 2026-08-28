@@ -10,7 +10,7 @@
 // [x] add collectable batteries
 // [] decorations, include a locker wher the playr can hide
 // [x] walls
-// [] angry man mechanic
+// [x] angry man mechanic
 // [not needed] map movement mechanic, along with moving the npcs
 // [] dialouge and lore whateever
 // [] lighting
@@ -572,6 +572,11 @@ main :: proc () {
 				idiotsam.x = 0
 				sam_direction = 1.0
 			}
+		}
+
+		if rl.CheckCollisionRecs(p.hitbox, idiotsam.hitbox) && IsSamAngry{
+			p.health = p.health - 40
+			bc.value = bc.value - 80
 		}
 
 
