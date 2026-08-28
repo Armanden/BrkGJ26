@@ -146,6 +146,13 @@ DrawDialouge :: proc(d: ^dialouge){
 	}
 }
 
+SpawnBats :: proc(mission: bool,x, y: i32, texture: rl.Texture2D, picked_up:bool, hitbox: rl.Rectangle, x2, y2: i32, texture2: rl.Texture2D, picked_up2: bool, hitbox2: rl.Rectangle ){
+	if mission{
+		DrawBatteryCollectable(x, y, texture, picked_up, hitbox)
+		DrawBatteryCollectable(x2, y2, texture2, picked_up2, hitbox2)
+	}
+}
+
 
 
 
@@ -175,6 +182,16 @@ main :: proc () {
 	bc.picked_up = false
 	bc.hitbox = {f32(bc.x) + 14, f32(bc.y) + 13, 3.5, 6,}
 
+	bc2: battery_collectable
+	bc2.x = 600
+	bc2.y = 600
+	bc2.value = 30
+	bc2.texture = rl.LoadTexture("assets/batterycollectable.png")
+	bc2.picked_up = false
+	bc2.hitbox = {f32(bc.x) + 14, f32(bc.y) + 13, 3.5, 6,}
+
+
+
 
 	texture1 :rl.Texture2D= rl.LoadTexture("assets/batteryempty.png")
 	texture2 :rl.Texture2D= rl.LoadTexture("assets/batteryone.png")
@@ -201,6 +218,14 @@ main :: proc () {
 	normal_cake.poisonous = false
 	normal_cake.texture = rl.LoadTexture("assets/cakenormal.png")
 	normal_cake.hitbox = {f32(normal_cake.x)+12, f32(normal_cake.y)+11, 4,4}
+
+	donut: food
+	donut.x = 45
+	donut.y = 290
+	donut.picked_up = false
+	donut.poisonous = false
+	donut.texture = rl.LoadTexture("assets/donut.png")
+	donut.hitbox = {f32(donut.x)+32, f32(donut.y)+32, 4,4}
 
 	//npcs
 
@@ -353,11 +378,14 @@ main :: proc () {
 	//map
 	game_map: rl.Texture2D = rl.LoadTexture("assets/map.png")
 
-		time_since_light:f32
+	time_since_light:f32
+
+	donut_mission_complete :bool=false
 
 	defer rl.UnloadTexture(p.texture)
 
 	defer rl.UnloadTexture(bc.texture)
+	defer rl.UnloadTexture(bc2.texture)
 
 	defer rl.UnloadTexture(texture1)
 	defer rl.UnloadTexture(texture2)
@@ -367,6 +395,7 @@ main :: proc () {
 
 	defer rl.UnloadTexture(poisonous_cake.texture)
 	defer rl.UnloadTexture(normal_cake.texture)
+	defer rl.UnloadTexture(donut.texture)
 
 	defer rl.UnloadTexture(bob.texture)
 	defer rl.UnloadTexture(cat.texture)
@@ -391,6 +420,13 @@ main :: proc () {
 				battery = battery + 20
 			}
 		}
+
+		if !bc2.picked_up {
+					if rl.CheckCollisionRecs(bc2.hitbox, p.hitbox){
+						bc2.picked_up = true
+						battery = battery + 30
+					}
+				}
 
 		if p.alive {
 			//movement
@@ -429,6 +465,21 @@ main :: proc () {
 					}
 			}
 		}
+
+		if !donut.picked_up{
+			if rl.CheckCollisionRecs(p.hitbox, donut.hitbox){
+				if rl.IsKeyPressed(.E){
+					donut.picked_up = true
+				}
+			}
+		}
+
+		if donut.picked_up && police.dialouge.state == 5 {
+			donut_mission_complete = true
+		}
+
+
+
 
 		if rl.CheckCollisionRecs(p.hitbox, bob.hitbox){
 			if rl.IsKeyPressed(.E) {
@@ -608,6 +659,9 @@ main :: proc () {
 		if p.y >= 750 {
 			p.y = 750
 		}
+		//map walls
+
+
 
 
 
@@ -631,17 +685,29 @@ main :: proc () {
 		}
 
 		if !p.alive{
-			rl.DrawText("YOU DIED", 300, 340, 50, rl.RED)
+			rl.DrawText("YOU DIED", 250, 340, 50, rl.RED)
 		}
 
 		//DrawFlashlight(battery,p.x,p.y)
 		DrawPlayer(p.x - 16, p.y - 16, p.texture, p.hitbox)
 		DrawBattery(battery, texture1,texture2,texture3,texture4,texture5)
-		DrawBatteryCollectable(bc.x, bc.y, bc.texture, bc.picked_up, bc.hitbox)
+		//DrawBatteryCollectable(bc.x, bc.y, bc.texture, bc.picked_up, bc.hitbox)
 
 		if battery > 0 {
 			DrawFood(poisonous_cake.x, poisonous_cake.y, poisonous_cake.texture,poisonous_cake.picked_up, poisonous_cake.hitbox)
 			DrawFood(normal_cake.x, normal_cake.y, normal_cake.texture,normal_cake.picked_up, normal_cake.hitbox)
+
+			if !donut.picked_up {
+				rl.DrawRectangleRec(donut.hitbox, rl.BLACK)
+				rl.DrawTextureEx(donut.texture, rl.Vector2{f32(donut.x),f32(donut.y)},0,2, rl.WHITE)
+			}
+
+			if donut.picked_up && police.dialouge.state < 6 {
+				rl.DrawRectangleRec(donut.hitbox, rl.BLACK)
+				rl.DrawTextureEx(donut.texture,rl.Vector2{680, 800}, 0, 2, rl.WHITE)
+			}
+
+
 
 			//NPCs
 			DrawNPC(bob.x,bob.y, bob.texture, bob.hitbox)
@@ -663,6 +729,11 @@ main :: proc () {
 			DrawDialouge(&meg.dialouge)
 			DrawDialouge(&police.dialouge)
 			DrawDialouge(&stan.dialouge)
+
+			SpawnBats(donut_mission_complete,
+				bc.x, bc.y, bc.texture, bc.picked_up, bc.hitbox,
+				bc2.x, bc2.y, bc2.texture, bc2.picked_up, bc2.hitbox
+			)
 
 		}
 		//always draw
