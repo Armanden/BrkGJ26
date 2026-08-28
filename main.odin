@@ -353,7 +353,7 @@ main :: proc () {
 	//map
 	game_map: rl.Texture2D = rl.LoadTexture("assets/map.png")
 
-
+		time_since_light:f32
 
 	defer rl.UnloadTexture(p.texture)
 
@@ -378,6 +378,8 @@ main :: proc () {
 	defer rl.UnloadTexture(stan.texture)
 
 	defer rl.UnloadTexture(game_map)
+
+
 
 	for !rl.WindowShouldClose() {
 		p.hitbox = {f32(p.x) - 1, f32(p.y) - 3, 3.2, 11,} // have to put it in the game loop so it updates with the playr position
@@ -581,6 +583,16 @@ main :: proc () {
 		}
 
 
+		// after 20 seconds of no light the player dies
+		// p.alive = false
+
+		if battery <= 0 {
+			time_since_light += rl.GetFrameTime()
+		}
+
+		if time_since_light >= 20 {
+			p.alive = false
+		}
 
 
 		//walls
@@ -616,6 +628,10 @@ main :: proc () {
 		//main
 		if battery > 0 {
 			rl.DrawTextureEx(game_map, rl.Vector2{0,90}, 0, 22, rl.WHITE)
+		}
+
+		if !p.alive{
+			rl.DrawText("YOU DIED", 300, 340, 50, rl.RED)
 		}
 
 		//DrawFlashlight(battery,p.x,p.y)
