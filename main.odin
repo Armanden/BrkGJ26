@@ -236,13 +236,13 @@ main :: proc () {
 	bob.dialouge.state = 1
 	bob.dialouge.drawing = false
 	bob.dialouge.lines = {
-		"Line 1: Some dialouge...",
-		"Line 2: Other dialouge",
-		"Line 3",
-		"Line 4",
-		"Line 5",
-		"Line 6",
-		"Line 7",
+		"Line 1: Hello mister, is there anyway you can help me, I seem lost",
+		"Line 2: Yes ofcourse, if you are so kind to collect the cakes which",
+		"Line 3: are littered around, I'll do you a favour",
+		"Line 4: Right away sir",
+		"Line 5: Ermmm, mister I seem to have accidentaly eaten the cakes",
+		"Line 6: Ohh... I understand, well can't help ya much but",
+		"Line 7: If you still want some help, you can go ask Sam he should down the isle",
 	}
 	bob.hitbox = {f32(bob.x) +14.2, f32(bob.y) +12.4 , 3.2, 11}
 	bob.texture = rl.LoadTexture("assets/bob.png")
@@ -255,11 +255,11 @@ main :: proc () {
 	cat.dialouge.lines = {
 		"Line 1: I is Cat",
 		"Line 2: I can has cheesburger",
-		"Line 3",
-		"Line 4",
-		"Line 5",
-		"Line 6",
-		"Line 7",
+		"Line 3: meeaw",
+		"Line 4: zzzzzzzz",
+		"Line 5: zzzzzzzz",
+		"Line 6: zzzzzzzz",
+		"Line 7: zzzzzzzz",
 	}
 	cat.hitbox = {f32(cat.x) +14.2, f32(cat.y) +12.4 , 3.2, 4}
 	cat.texture = rl.LoadTexture("assets/cat.png")
@@ -270,13 +270,13 @@ main :: proc () {
 	hungry.dialouge.state = 1
 	hungry.dialouge.drawing = false
 	hungry.dialouge.lines = {
-		"Line 1: I is Cat",
-		"Line 2: I can has cheesburger",
-		"Line 3",
-		"Line 4",
-		"Line 5",
-		"Line 6",
-		"Line 7",
+		"Line 1: I am Stan",
+		"Line 2: I think I darnk too muhc",
+		"Line 3: Hello sir, Are you alright ?",
+		"Line 4: yes yes",
+		"Line 5: Sir do you know a way to get out",
+		"Line 6: yes yes, you go right and you will see the ",
+		"Line 7: castel of arghhhhhh",
 	}
 	hungry.hitbox = {f32(hungry.x) +14.2, f32(hungry.y) +12.4 , 3.2, 4}
 	hungry.texture = rl.LoadTexture("assets/hungry.png")
@@ -290,11 +290,11 @@ main :: proc () {
 	idiotsam.dialouge.state = 1
 	idiotsam.dialouge.drawing = false
 	idiotsam.dialouge.lines = {
-		"Line 1: I is Cat",
-		"Line 2: I can has cheesburger",
-		"Line 3",
-		"Line 4",
-		"Line 5",
+		"Line 1: I Like cats",
+		"Line 2: I am hungry",
+		"Line 3: he-hello mister, your friend bob has sent me, he said you ",
+		"Line 4: could help, I seem to have accidentaly eaten the cake",
+		"Line 5: you ate what, YOU, YOU little... AHHHHHHHHHH",
 		"Line 6",
 		"Line 7",
 	}
@@ -309,13 +309,13 @@ main :: proc () {
 	jake.dialouge.state = 1
 	jake.dialouge.drawing = false
 	jake.dialouge.lines = {
-		"Line 1: I is Cat",
-		"Line 2: I can has cheesburger",
-		"Line 3",
-		"Line 4",
-		"Line 5",
-		"Line 6",
-		"Line 7",
+		"Line 1: Hello sir, how are you",
+		"Line 2: Thank you young one, what brings you here",
+		"Line 3: I came to my friends birthday party,",
+		"Line 4: but I can't seem to find anyone",
+		"Line 5: Well I am not surprised, It is 1 o'clock sharp",
+		"Line 6: You mean 1 pm right... oh no how could I not realise",
+		"Line 7: Don't worry young one, if you go right up the corridor you'll get out",
 	}
 	jake.hitbox = {f32(jake.x) +14.2, f32(jake.y) +12.4 , 3.2, 4}
 	jake.texture = rl.LoadTexture("assets/jake.png")
@@ -326,9 +326,9 @@ main :: proc () {
 	meg.dialouge.state = 1
 	meg.dialouge.drawing = false
 	meg.dialouge.lines = {
-		"Line 1: I is Cat",
-		"Line 2: I can has cheesburger",
-		"Line 3",
+		"Line 1: Hello Madam is this the exit",
+		"Line 2: Yes it is, go kid save yourself",
+		"Line 3: This place is crazy even for the best of us",
 		"Line 4",
 		"Line 5",
 		"Line 6",
@@ -343,12 +343,12 @@ main :: proc () {
 	police.dialouge.state = 1
 	police.dialouge.drawing = false
 	police.dialouge.lines = {
-		"Line 1: I is Cat",
-		"Line 2: I can has cheesburger",
-		"Line 3",
-		"Line 4",
-		"Line 5",
-		"Line 6",
+		"Line 1: Hello little girl, how are you ?",
+		"Line 2: Hi Sir police man, I think I am lost and in need of help",
+		"Line 3: Could you maybe help me",
+		"Line 4: O yes ofcourse, if you'll be so kind to bring me a doughnut",
+		"Line 5: Ahh thanks little girl",
+		"Line 6: There some batteries for you, you'll need them",
 		"Line 7",
 	}
 	police.hitbox = {f32(police.x) +14.2, f32(police.y) +12.4 , 3.2, 4}
@@ -360,13 +360,13 @@ main :: proc () {
 	stan.dialouge.state = 1
 	stan.dialouge.drawing = false
 	stan.dialouge.lines = {
-		"Line 1: I is Cat",
-		"Line 2: I can has cheesburger",
-		"Line 3",
-		"Line 4",
-		"Line 5",
-		"Line 6",
-		"Line 7",
+		"Line 1: Hi how can I help you ? ",
+		"Line 2: Hello sir do you know a way to get out",
+		"Line 3: Yes I do infact, if you go down, down enought to see",
+		"Line 4: To see what sir",
+		"Line 5: to see the cat,",
+		"Line 6: and then sir ",
+		"Line 7: Sir hello... -zzzzzz",
 	}
 	stan.hitbox = {f32(stan.x) +14.2, f32(stan.y) +12.4 , 3.2, 4}
 	stan.texture = rl.LoadTexture("assets/stan.png")
