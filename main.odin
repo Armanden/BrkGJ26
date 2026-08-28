@@ -11,8 +11,10 @@
 // [] decorations, include a locker wher the playr can hide
 // [x] walls
 // [] angry man mechanic
-// [] map movement mechanic, along with moving the npcs
+// [not needed] map movement mechanic, along with moving the npcs
 // [] dialouge and lore whateever
+// [] lighting
+// [] police donut mechanic, where he gives you batteries
 //
 // Bug:
 // [x] if the player eats the cake and spams the E key it doesnt stop the interaction from stopping till the player stops colliding
@@ -116,7 +118,7 @@ DrawBatteryCollectable :: proc(x,y : i32, texture: rl.Texture2D, status: bool, h
 
 	if !status{
 		rl.DrawRectangleRec(hitbox, rl.BLACK)
-		rl.DrawTexture(texture, x,y, rl.WHITE)
+		rl.DrawTextureEx(texture, rl.Vector2{f32(x),f32(y)},0,1.6, rl.WHITE)
 	}
 }
 
@@ -131,7 +133,7 @@ DrawFood :: proc(x,y : i32, texture: rl.Texture2D, status: bool, hitbox: rl.Rect
 
 DrawNPC :: proc(x,y: i32, texture: rl.Texture2D, hitbox: rl.Rectangle ){
 	rl.DrawRectangleRec(hitbox, rl.BLACK)
-	rl.DrawTexture(texture, x,y, rl.WHITE)
+	rl.DrawTextureEx(texture, rl.Vector2{f32(x),f32(y)},0,1.5, rl.WHITE)
 }
 
 DrawDialouge :: proc(d: ^dialouge){
@@ -184,16 +186,16 @@ main :: proc () {
 	batteryTimer: f32 = 0
 
 	poisonous_cake: food
-	poisonous_cake.x = 300
-	poisonous_cake.y = 550
+	poisonous_cake.x = 130
+	poisonous_cake.y = 530
 	poisonous_cake.picked_up = false
 	poisonous_cake.poisonous = true
 	poisonous_cake.texture = rl.LoadTexture("assets/cakepoisonous.png")
 	poisonous_cake.hitbox = {f32(poisonous_cake.x) + 12, f32(poisonous_cake.y) + 11 , 4,4}
 
 	normal_cake: food
-	normal_cake.x = 600
-	normal_cake.y = 200
+	normal_cake.x = 590
+	normal_cake.y = 620
 	normal_cake.picked_up = false
 	normal_cake.poisonous = false
 	normal_cake.texture = rl.LoadTexture("assets/cakenormal.png")
@@ -219,8 +221,8 @@ main :: proc () {
 	bob.texture = rl.LoadTexture("assets/bob.png")
 
 	cat: npc
-	cat.x = 600
-	cat.y = 500
+	cat.x = 602
+	cat.y = 675
 	cat.dialouge.state = 1
 	cat.dialouge.drawing = false
 	cat.dialouge.lines = {
@@ -257,7 +259,7 @@ main :: proc () {
 
 	idiotsam: npc
 	idiotsam.x = 300
-	idiotsam.y = 500
+	idiotsam.y = 200
 	idiotsam.dialouge.state = 1
 	idiotsam.dialouge.drawing = false
 	idiotsam.dialouge.lines = {
@@ -293,7 +295,7 @@ main :: proc () {
 
 	meg: npc
 	meg.x = 400
-	meg.y = 200
+	meg.y = 100
 	meg.dialouge.state = 1
 	meg.dialouge.drawing = false
 	meg.dialouge.lines = {
@@ -309,8 +311,8 @@ main :: proc () {
 	meg.texture = rl.LoadTexture("assets/meg.png")
 
 	police: npc
-	police.x = 200
-	police.y = 600
+	police.x = 30
+	police.y = 680
 	police.dialouge.state = 1
 	police.dialouge.drawing = false
 	police.dialouge.lines = {
@@ -326,7 +328,7 @@ main :: proc () {
 	police.texture = rl.LoadTexture("assets/police.png")
 
 	stan: npc
-	stan.x = 500
+	stan.x = 300
 	stan.y = 500
 	stan.dialouge.state = 1
 	stan.dialouge.drawing = false
@@ -552,8 +554,26 @@ main :: proc () {
 
 		//angry idiot sam mechanic
 		if normal_cake.picked_up && idiotsam.dialouge.state >=6 {
-
+			IsSamAngry = true
 		}
+
+		sam_direction: f32 = 1.0
+		sam_speed: f32 = 10.0
+
+		if IsSamAngry {
+			idiotsam.x += i32(sam_direction * sam_speed )
+
+      		if idiotsam.x > 690 {
+        		idiotsam.x = 690
+          		sam_direction = -1.0
+        	}
+
+         	if idiotsam.x <= 0 {
+          		idiotsam.x = 0
+           		sam_direction = 1.0
+          	}
+		}
+
 
 
 
