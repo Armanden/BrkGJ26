@@ -8,14 +8,15 @@
 // [x] tracker of talking --> after you talk to someone, their speech bubble changes
 // [x] Bars and textures
 // [x] add collectable batteries
-// [] decorations, include a locker wher the playr can hide
+// [not needed] include a locker wher the playr can hide
 // [x] walls
 // [x] angry man mechanic
 // [not needed] map movement mechanic, along with moving the npcs
 // [] dialouge and lore whateever
 // [x] lighting
-// [] police donut mechanic, where he gives you batteries
+// [x] police donut mechanic, where he gives you batteries
 // [] map walls
+// [] add a few baloons
 //
 // Bug:
 // [x] if the player eats the cake and spams the E key it doesnt stop the interaction from stopping till the player stops colliding
@@ -183,12 +184,12 @@ main :: proc () {
 	bc.hitbox = {f32(bc.x) + 14, f32(bc.y) + 13, 3.5, 6,}
 
 	bc2: battery_collectable
-	bc2.x = 600
+	bc2.x = 580
 	bc2.y = 600
 	bc2.value = 30
 	bc2.texture = rl.LoadTexture("assets/batterycollectable.png")
 	bc2.picked_up = false
-	bc2.hitbox = {f32(bc.x) + 14, f32(bc.y) + 13, 3.5, 6,}
+	bc2.hitbox = {f32(bc2.x) + 14, f32(bc2.y) + 13, 3.5, 6,}
 
 
 
@@ -382,6 +383,8 @@ main :: proc () {
 
 	donut_mission_complete :bool=false
 
+	baloon: rl.Texture2D = rl.LoadTexture("assets/baloon.png")
+
 	defer rl.UnloadTexture(p.texture)
 
 	defer rl.UnloadTexture(bc.texture)
@@ -407,6 +410,8 @@ main :: proc () {
 	defer rl.UnloadTexture(stan.texture)
 
 	defer rl.UnloadTexture(game_map)
+
+	defer rl.UnloadTexture(baloon)
 
 
 
@@ -734,6 +739,16 @@ main :: proc () {
 				bc.x, bc.y, bc.texture, bc.picked_up, bc.hitbox,
 				bc2.x, bc2.y, bc2.texture, bc2.picked_up, bc2.hitbox
 			)
+
+
+			rl.DrawTexture(baloon, 370, 390, rl.WHITE)
+			rl.DrawTexture(baloon, 160, 390, rl.WHITE)
+			rl.DrawTexture(baloon, 240, 390, rl.WHITE)
+			rl.DrawTexture(baloon, 300, 390, rl.WHITE)
+			rl.DrawTexture(baloon, 160, 260, rl.WHITE)
+			rl.DrawTexture(baloon, 240, 260, rl.WHITE)
+			rl.DrawTexture(baloon, 300, 260, rl.WHITE)
+
 
 		}
 		//always draw
