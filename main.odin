@@ -672,7 +672,6 @@ main :: proc () {
 
 
 
-
 		rl.BeginDrawing()
 
 		batteryTimer += rl.GetFrameTime()
